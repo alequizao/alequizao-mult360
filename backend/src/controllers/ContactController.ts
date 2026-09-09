@@ -3,6 +3,38 @@ import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
 
 import Contact from "../models/Contact";
+import ContactHistory from "../models/ContactHistory";
+import User from "../models/User";
+
+// ALEQUIZAO: grava no histórico do contato quem alterou o quê
+const CAMPOS = ["name", "number", "email"];
+const registrarHistorico = async (req: Request, contactId: number | string, action: string, antes: any, depois: any) => {
+  try {
+    const { id: userId, companyId } = req.user;
+    const u = await User.findByPk(userId);
+    const changes: any[] = [];
+    if (action === "editado") {
+      for (const c of CAMPOS) {
+        const de = antes?.[c] ?? ""; const para = depois?.[c] ?? "";
+        if (String(de) !== String(para)) changes.push({ campo: c, de, para });
+      }
+      const extraAntes = JSON.stringify((antes?.extraInfo || []).map((e: any) => ({ name: e.name, value: e.value })));
+      const extraDepois = JSON.stringify((depois?.extraInfo || []).map((e: any) => ({ name: e.name, value: e.value })));
+      if (extraAntes !== extraDepois) changes.push({ campo: "extraInfo", de: extraAntes, para: extraDepois });
+      if (!changes.length) return;
+    }
+    await ContactHistory.create({ contactId: +contactId, userId, userName: u?.name || "", action, changes: JSON.stringify(changes), companyId } as any);
+  } catch (e) {
+    console.error("historico contato", e);
+  }
+};
+
+export const history = async (req: Request, res: Response): Promise<Response> => {
+  const { contactId } = req.params;
+  const { companyId } = req.user;
+  const registros = await ContactHistory.findAll({ where: { contactId, companyId }, order: [["createdAt", "DESC"]], limit: 200 });
+  return res.json(registros.map(r => ({ id: r.id, userName: r.userName, action: r.action, changes: JSON.parse(r.changes || "[]"), createdAt: r.createdAt })));
+};
 import ListContactsService from "../services/ContactServices/ListContactsService";
 import CreateContactService from "../services/ContactServices/CreateContactService";
 import ShowContactService from "../services/ContactServices/ShowContactService";
@@ -117,6 +149,7 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
     // profilePicUrl,
     companyId
   });
+  await registrarHistorico(req, contact.id, "criado", null, contact.toJSON());
 
   const io = getIO();
   io.to(`company-${companyId}-mainchannel`).emit(`company-${companyId}-contact`, {
@@ -164,11 +197,16 @@ export const update = async (
 
   const { contactId } = req.params;
 
+  const antes = await ShowContactService(contactId, companyId);
+  const antesJson = antes.toJSON();
+
   const contact = await UpdateContactService({
     contactData,
     contactId,
     companyId
   });
+
+  await registrarHistorico(req, contactId, "editado", antesJson, contact.toJSON());
 
   const io = getIO();
   io.to(`company-${companyId}-mainchannel`).emit(`company-${companyId}-contact`, {
@@ -184,7 +222,12 @@ export const remove = async (
   res: Response
 ): Promise<Response> => {
   const { contactId } = req.params;
-  const { companyId } = req.user;
+  const { companyId, profile } = req.user;
+
+  // ALEQUIZAO: só administrador exclui contato
+  if (profile !== "admin") {
+    throw new AppError("Somente administradores podem excluir contatos", 403);
+  }
 
   await ShowContactService(contactId, companyId);
 

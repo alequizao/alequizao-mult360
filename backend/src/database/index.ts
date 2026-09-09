@@ -20,6 +20,7 @@ import QueueOption from "../models/QueueOption";
 import Schedule from "../models/Schedule";
 import Tag from "../models/Tag";
 import AutoReply from "../models/AutoReply";
+import ContactHistory from "../models/ContactHistory";
 import TicketTag from "../models/TicketTag";
 import ContactList from "../models/ContactList";
 import ContactListItem from "../models/ContactListItem";
@@ -67,6 +68,7 @@ const models = [
   Schedule,
   Tag,
   AutoReply,
+  ContactHistory,
   TicketTag,
   ContactList,
   ContactListItem,

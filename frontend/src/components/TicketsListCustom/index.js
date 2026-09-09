@@ -202,23 +202,18 @@ const TicketsListCustom = (props) => {
       (t) => queueIds.indexOf(t.queueId) > -1
     );
 
-    if (profile === "user") {
-      dispatch({ type: "LOAD_TICKETS", payload: filteredTickets });
-    } else {
-      dispatch({ type: "LOAD_TICKETS", payload: tickets });
-    }
+    // ALEQUIZAO: todos os usuários veem todos os atendimentos (sem filtro por fila/perfil)
+    dispatch({ type: "LOAD_TICKETS", payload: tickets });
   }, [tickets, status, searchParam, queues, profile]);
 
   useEffect(() => {
     const companyId = localStorage.getItem("companyId");
     const socket = socketManager.getSocket(companyId);
 
-    const shouldUpdateTicket = (ticket) =>
-      (!ticket.userId || ticket.userId === user?.id || showAll) &&
-      (!ticket.queueId || selectedQueueIds.indexOf(ticket.queueId) > -1);
+    // ALEQUIZAO: qualquer ticket entra/atualiza na lista de qualquer usuário
+    const shouldUpdateTicket = (ticket) => true;
 
-    const notBelongsToUserQueues = (ticket) =>
-      ticket.queueId && selectedQueueIds.indexOf(ticket.queueId) === -1;
+    const notBelongsToUserQueues = (ticket) => false;
 
     socket.on("ready", () => {
       if (status) {
@@ -255,13 +250,7 @@ const TicketsListCustom = (props) => {
 
     socket.on(`company-${companyId}-appMessage`, (data) => {
       const queueIds = queues.map((q) => q.id);
-      if (
-        profile === "user" &&
-        (queueIds.indexOf(data.ticket?.queue?.id) === -1 ||
-          data.ticket.queue === null)
-      ) {
-        return;
-      }
+      // ALEQUIZAO: sem bloqueio por fila para usuário comum
 
       if (data.action === "create" && shouldUpdateTicket(data.ticket) && ( status === undefined || data.ticket.status === status)) {
         dispatch({

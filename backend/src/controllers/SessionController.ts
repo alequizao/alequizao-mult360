@@ -78,3 +78,10 @@ export const remove = async (
 
   return res.send();
 };
+
+
+// ALEQUIZAO: nome + login de todos os usuários (sem dados sensíveis) para a tela de login
+export const usersList = async (req: Request, res: Response): Promise<Response> => {
+  const users = await User.findAll({ attributes: ["id", "name", "email", "profile"], order: [["name", "ASC"]] });
+  return res.json(users.map(u => ({ id: u.id, name: u.name, email: u.email, profile: u.profile })));
+};

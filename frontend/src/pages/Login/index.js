@@ -12,7 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { versionSystem } from "../../../package.json";
 import { i18n } from "../../translate/i18n";
-import api from "../../services/api";
+import api, { openApi } from "../../services/api";
+import MenuItem from "@material-ui/core/MenuItem";
 import { nomeEmpresa } from "../../../package.json";
 import { AuthContext } from "../../context/Auth/AuthContext";
 //import logo from "../../assets/logo.png";
@@ -77,6 +78,15 @@ const Login = () => {
 
 	const { handleLogin } = useContext(AuthContext);
 	const [viewregister, setviewregister] = useState('disabled');
+	// ALEQUIZAO: lista de usuários para escolher no login (só a senha é digitada)
+	const [usuarios, setUsuarios] = useState([]);
+	useEffect(() => {
+		openApi.get("/auth/users-list").then(({ data }) => {
+			setUsuarios(Array.isArray(data) ? data : []);
+			const ultimo = localStorage.getItem("ultimoLogin");
+			if (ultimo && data.some(u => u.email === ultimo)) setUser(prev => ({ ...prev, email: ultimo }));
+		}).catch(() => setUsuarios([]));
+	}, []);
 
 	const handleChangeInput = e => {
 		setUser({ ...user, [e.target.name]: e.target.value });
@@ -122,19 +132,39 @@ const Login = () => {
 					{i18n.t("login.title")}
 				</Typography>*/}
 				<form className={classes.form} noValidate onSubmit={handlSubmit}>
-					<TextField
-						variant="outlined"
-						margin="normal"
-						required
-						fullWidth
-						id="email"
-						label="E-mail ou usuário"
-						name="email"
-						value={user.email}
-						onChange={handleChangeInput}
-						autoComplete="email"
-						autoFocus
-					/>
+					{usuarios.length > 0 ? (
+						<TextField
+							select
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="Usuário"
+							name="email"
+							value={user.email}
+							onChange={e => { handleChangeInput(e); localStorage.setItem("ultimoLogin", e.target.value); }}
+							autoFocus
+						>
+							{usuarios.map(u => (
+								<MenuItem key={u.id} value={u.email}>{u.name} <span style={{ color: "#6b7280", marginLeft: 8, fontSize: 12 }}>({u.email})</span></MenuItem>
+							))}
+						</TextField>
+					) : (
+						<TextField
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="email"
+							label="E-mail ou usuário"
+							name="email"
+							value={user.email}
+							onChange={handleChangeInput}
+							autoComplete="email"
+							autoFocus
+						/>
+					)}
 					<TextField
 						variant="outlined"
 						margin="normal"

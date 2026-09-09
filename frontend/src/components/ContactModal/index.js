@@ -61,6 +61,34 @@ const ContactSchema = Yup.object().shape({
 	email: Yup.string().email("Invalid email"),
 });
 
+const NOMES = { name: "Nome", number: "Número", email: "E-mail", extraInfo: "Informações adicionais" };
+const HistoricoContato = ({ contactId, open }) => {
+	const [lista, setLista] = useState([]);
+	useEffect(() => {
+		if (!contactId || !open) return;
+		api.get(`/contacts/${contactId}/history`).then(({ data }) => setLista(data)).catch(() => setLista([]));
+	}, [contactId, open]);
+	if (!contactId) return null;
+	return (
+		<div style={{ marginTop: 16, borderTop: "1px solid #e5e7eb", paddingTop: 10 }}>
+			<Typography variant="subtitle2" style={{ marginBottom: 6 }}>Histórico de edições</Typography>
+			{lista.length === 0 && <Typography variant="caption" color="textSecondary">Nenhuma alteração registrada ainda.</Typography>}
+			<div style={{ maxHeight: 180, overflowY: "auto" }}>
+				{lista.map(h => (
+					<div key={h.id} style={{ fontSize: 12, padding: "6px 0", borderBottom: "1px dashed #eee" }}>
+						<b>{new Date(h.createdAt).toLocaleString("pt-BR")}</b> · {h.userName || "sistema"} · {h.action}
+						{h.changes.map((c, i) => (
+							<div key={i} style={{ color: "#4b5563", marginLeft: 8 }}>
+								{NOMES[c.campo] || c.campo}: <s>{String(c.de || "—")}</s> → <b>{String(c.para || "—")}</b>
+							</div>
+						))}
+					</div>
+				))}
+			</div>
+		</div>
+	);
+};
+
 const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
 	const classes = useStyles();
 	const isMounted = useRef(true);
@@ -245,6 +273,7 @@ const ContactModal = ({ open, onClose, contactId, initialValues, onSave }) => {
 										</>
 									)}
 								</FieldArray>
+								<HistoricoContato contactId={contactId} open={open} />
 							</DialogContent>
 							<DialogActions>
 								<Button

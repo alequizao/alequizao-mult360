@@ -11,5 +11,7 @@ authRoutes.post("/login", SessionController.store);
 authRoutes.post("/refresh_token", SessionController.update);
 authRoutes.delete("/logout", isAuth, SessionController.remove);
 authRoutes.get("/me", isAuth, SessionController.me);
+// ALEQUIZAO: lista de usuários para o seletor da tela de login
+authRoutes.get("/users-list", SessionController.usersList);
 
 export default authRoutes;

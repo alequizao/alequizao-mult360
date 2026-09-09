@@ -47,10 +47,9 @@ const ListTicketsService = async ({
   withUnreadMessages,
   companyId
 }: Request): Promise<Response> => {
-  let whereCondition: Filterable["where"] = {
-    [Op.or]: [{ userId }, { status: "pending" }],
-    queueId: { [Op.or]: [queueIds, null] }
-  };
+  // ALEQUIZAO: todos os usuários (atendentes e administradores) veem TODOS os atendimentos da empresa,
+  // novos e antigos, sem filtro por atendente responsável nem por fila.
+  let whereCondition: Filterable["where"] = {};
   let includeCondition: Includeable[];
 
   includeCondition = [
@@ -81,9 +80,7 @@ const ListTicketsService = async ({
     },
   ];
 
-  if (showAll === "true") {
-    whereCondition = { queueId: { [Op.or]: [queueIds, null] } };
-  }
+  // showAll: já é o comportamento padrão (ALEQUIZAO)
 
   if (status) {
     whereCondition = {
@@ -159,8 +156,6 @@ const ListTicketsService = async ({
     const userQueueIds = user.queues.map(queue => queue.id);
 
     whereCondition = {
-      [Op.or]: [{ userId }, { status: "pending" }],
-      queueId: { [Op.or]: [userQueueIds, null] },
       unreadMessages: { [Op.gt]: 0 }
     };
   }

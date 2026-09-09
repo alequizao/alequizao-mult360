@@ -203,7 +203,7 @@ const TicketsManagerTabs = () => {
   const [tab, setTab] = useState("open");
   const [tabOpen, setTabOpen] = useState("open");
   const [newTicketModalOpen, setNewTicketModalOpen] = useState(false);
-  const [showAllTickets, setShowAllTickets] = useState(false);
+  const [showAllTickets, setShowAllTickets] = useState(true); // ALEQUIZAO: 'Todos' ligado por padrão
   const searchInputRef = useRef();
   const { user } = useContext(AuthContext);
   const { profile } = user;
