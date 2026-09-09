@@ -111,9 +111,7 @@ export const remove = async (
 ): Promise<Response> => {
   const { id } = req.params;
 
-  if (req.user.profile !== "admin") {
-    throw new AppError("ERR_NO_PERMISSION", 403);
-  }
+  // ALEQUIZAO: liberado para todos os usuários
 
   await DeleteTicketNoteService(id);
 

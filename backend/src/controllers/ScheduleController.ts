@@ -74,9 +74,7 @@ export const update = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  if (req.user.profile !== "admin") {
-    throw new AppError("ERR_NO_PERMISSION", 403);
-  }
+  // ALEQUIZAO: liberado para todos os usuários
 
   const { scheduleId } = req.params;
   const scheduleData = req.body;

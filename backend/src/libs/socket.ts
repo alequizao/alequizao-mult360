@@ -61,7 +61,7 @@ export const initIO = (httpServer: Server): SocketIO => {
       Ticket.findByPk(ticketId).then(
         (ticket) => {
           if (ticket && ticket.companyId === user.companyId
-            && (ticket.userId === user.id || user.profile === "admin")) {
+            /* ALEQUIZAO: qualquer usuário */ && true) {
             let c: number;
             if ((c = counters.incrementCounter(`ticket-${ticketId}`)) === 1) {
               socket.join(ticketId);
@@ -94,7 +94,7 @@ export const initIO = (httpServer: Server): SocketIO => {
     socket.on("joinNotification", async () => {
       let c: number;
       if ((c = counters.incrementCounter("notification")) === 1) {
-        if (user.profile === "admin") {
+        if (true /* ALEQUIZAO: todos como admin nas salas */) {
           socket.join(`company-${user.companyId}-notification`);
         } else {
           user.queues.forEach((queue) => {
@@ -113,7 +113,7 @@ export const initIO = (httpServer: Server): SocketIO => {
     socket.on("leaveNotification", async () => {
       let c: number;
       if ((c = counters.decrementCounter("notification")) === 0) {
-        if (user.profile === "admin") {
+        if (true /* ALEQUIZAO: todos como admin nas salas */) {
           socket.leave(`company-${user.companyId}-notification`);
         } else {
           user.queues.forEach((queue) => {
@@ -130,7 +130,7 @@ export const initIO = (httpServer: Server): SocketIO => {
  
     socket.on("joinTickets", (status: string) => {
       if (counters.incrementCounter(`status-${status}`) === 1) {
-        if (user.profile === "admin") {
+        if (true /* ALEQUIZAO: todos como admin nas salas */) {
           logger.debug(`Admin ${user.id} of company ${user.companyId} joined ${status} tickets channel.`);
           socket.join(`company-${user.companyId}-${status}`);
         } else if (status === "pending") {
@@ -149,7 +149,7 @@ export const initIO = (httpServer: Server): SocketIO => {
     
     socket.on("leaveTickets", (status: string) => {
       if (counters.decrementCounter(`status-${status}`) === 0) {
-        if (user.profile === "admin") {
+        if (true /* ALEQUIZAO: todos como admin nas salas */) {
           logger.debug(`Admin ${user.id} of company ${user.companyId} leaved ${status} tickets channel.`);
           socket.leave(`company-${user.companyId}-${status}`);
         } else if (status === "pending") {

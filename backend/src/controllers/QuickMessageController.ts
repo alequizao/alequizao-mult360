@@ -144,7 +144,9 @@ export const findList = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const params = req.query as FindParams;
+  const q = req.query as FindParams;
+  // ALEQUIZAO: usa a empresa/usuário logados quando não vierem na query
+  const params = { companyId: String(q.companyId || req.user.companyId), userId: String(q.userId || req.user.id) } as FindParams;
   const records: QuickMessage[] = await FindService(params);
 
   return res.status(200).json(records);

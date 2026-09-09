@@ -105,3 +105,8 @@ Ele **não** tem integração nativa com a Evolution API — a Evolution continu
 - **Contatos:** todos veem e editam; **excluir só admin** (backend devolve 403 e o botão já não aparece para usuário comum). **Histórico de edições** por contato: tabela `ContactHistories` (quem, quando, campo, de → para; também registra criação), rota `GET /contacts/:id/history`, exibido no fim do modal do contato.
 - Chat interno testado entre dois usuários (nativo, sem alteração).
 - Kanban: colunas = Etiquetas com a chave "Kanban" ligada.
+
+### 13. Permissões dos usuários comuns (2026-09-09, 14h20)
+- Erro "Você não tem permissão" no danilo e demais: usuários comuns não entravam nas salas do Socket.IO dos tickets de outros atendentes/filas (`backend/src/libs/socket.ts`) e algumas ações eram só admin. Agora **todos entram nas mesmas salas que um admin** (tempo real de todos os tickets), podem editar agendamentos e apagar observações; `allTicket` ligado para todos. Continuam só para admin: excluir contato, excluir mensagem, editar/excluir conexão, usuários, configurações e etiquetas.
+- `GET /quick-messages/list` usa empresa/usuário logados quando a query não traz os parâmetros (era 500).
+- Teste E2E como usuário comum (`/opt/menu-thumbs/teste-user2.js`): login pelo seletor, 13 telas, abrir ticket, sem nenhum erro HTTP.
