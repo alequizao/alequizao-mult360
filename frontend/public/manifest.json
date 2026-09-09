@@ -1,0 +1,37 @@
+{
+ "short_name": "ALEQUIZÃO MULT360",
+ "name": "ALEQUIZÃO MULT360",
+ "description": "Atendimento multicanal WhatsApp — desenvolvido por @alequizao",
+ "icons": [
+  {
+   "src": "favicon.ico",
+   "sizes": "32x32 16x16",
+   "type": "image/x-icon"
+  },
+  {
+   "src": "android-chrome-192x192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "android-chrome-512x512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "start_url": "/",
+ "scope": "/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "theme_color": "#2563EB",
+ "background_color": "#ffffff",
+ "lang": "pt-BR"
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+.env
+*.log
+*.bak*
+*.tar.gz
+dist.zip
+status.json
+backend/public/
+backend/private/
+backend/certs/
+frontend/package-lock.json
+backend/package-lock.json
+.DS_Store
