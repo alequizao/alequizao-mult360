@@ -31,9 +31,13 @@ Plataforma de atendimento multicanal via WhatsApp (multiusuário, filas, chatbot
 - **PWA** com ícones próprios, service worker com atualização imediata, tema clean azul, logos em `backend/public/logotipos/`.
 - Página de status (`index.php` + coletor por cron) para acompanhar serviços, PM2, banco, conexões e erros.
 
-## 🚀 Instalação
+## 📖 Manual
 
-Passo a passo completo, decisões e correções em **[INSTALACAO.md](INSTALACAO.md)**. Resumo:
+**[MANUAL.md](MANUAL.md)** — passo a passo completo de **instalação, configuração e uso** (requisitos, banco, .env, PM2, proxy com WebSocket, primeiro acesso, conexão do WhatsApp, usuários, filas, respostas automáticas, campanhas, Kanban, chat interno, API, backup e problemas comuns).
+
+Histórico técnico da implantação na VPS e das correções: [INSTALACAO.md](INSTALACAO.md).
+
+## 🚀 Instalação (resumo)
 
 ```bash
 # backend
