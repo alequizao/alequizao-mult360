@@ -333,6 +333,8 @@ O PWA instalado atualiza sozinho em até 60 s (service worker com atualização 
 
 ### Backup diário do banco (recomendado)
 
+Pronto para usar: copie [`docs/whaticket-backup.sh`](docs/whaticket-backup.sh) para `/usr/local/bin/`, ajuste a senha e o caminho, `chmod 700`, e agende `30 3 * * * root /usr/local/bin/whaticket-backup.sh` em `/etc/cron.d/whaticket-backup`. Alternativa mínima:
+
 ```bash
 sudo tee /etc/cron.d/whaticket-backup >/dev/null <<'EOF'
 30 3 * * * root mkdir -p /root/backups && PGPASSWORD=SENHA pg_dump -h 127.0.0.1 -U whaticket whaticket | gzip > /root/backups/whaticket-$(date +\%F).sql.gz && find /root/backups -name 'whaticket-*.sql.gz' -mtime +7 -delete

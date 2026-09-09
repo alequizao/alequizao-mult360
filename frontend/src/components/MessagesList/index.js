@@ -37,6 +37,20 @@ import { ForwardMessageContext } from "../../context/ForwarMessage/ForwardMessag
 import { ReplyMessageContext } from "../../context/ReplyingMessage/ReplyingMessageContext";
 import SelectMessageCheckbox from "./SelectMessageCheckbox";
 
+// ALEQUIZAO: esconde o nome do arquivo embaixo de mídias (mantém legendas de verdade)
+const ehNomeDeArquivo = (message) => {
+  try {
+    if (!message || !message.mediaUrl || !message.body) return false;
+    const body = String(message.body).trim();
+    if (body.includes("\n") || body.length > 200) return false;
+    const nome = decodeURIComponent(String(message.mediaUrl).split("/").pop() || "");
+    if (body === nome) return true;
+    const ext = (nome.match(/\.[a-z0-9]{2,5}$/i) || [""])[0].toLowerCase();
+    if (ext && body.toLowerCase().endsWith(ext)) return true;
+    return /^[\w\-. ()\[\]]+\.[a-z0-9]{2,5}$/i.test(body) && ["application", "image", "video", "audio"].includes(message.mediaType);
+  } catch (e) { return false; }
+};
+
 const useStyles = makeStyles((theme) => ({
   messagesListWrapper: {
     overflow: "hidden",
@@ -842,9 +856,7 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
                   {message.quotedMsg && renderQuotedMessage(message)}
                   {message.mediaType !== "reactionMessage" && (
                     <MarkdownWrapper>
-                      {message.mediaType === "locationMessage" || message.mediaType === "contactMessage" 
-                        ? null
-                        : message.body}
+                      {message.mediaType === "locationMessage" || message.mediaType === "contactMessage" || ehNomeDeArquivo(message) ? null : message.body}
                     </MarkdownWrapper>
                   )}
                   {message.quotedMsg && message.mediaType === "reactionMessage" && message.body && (
@@ -930,7 +942,7 @@ const MessagesList = ({ ticket, ticketId, isGroup }) => {
                   )}
                   {message.quotedMsg && renderQuotedMessage(message)}
                   {message.mediaType !== "reactionMessage" && message.mediaType !== "locationMessage" && (
-                    <MarkdownWrapper>{message.body}</MarkdownWrapper>
+                    <MarkdownWrapper>{ehNomeDeArquivo(message) ? null : message.body}</MarkdownWrapper>
                   )}
                   {message.quotedMsg && message.mediaType === "reactionMessage" && message.body && (
                     <>

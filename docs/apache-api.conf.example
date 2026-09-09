@@ -1,0 +1,18 @@
+# WHATICKET — backend/API api.seudominio.com (HTTPS pelo Cloudflare) -> Node 127.0.0.1:7777 (+ Socket.IO websocket)
+<VirtualHost *:80>
+    ServerName api.seudominio.com
+    ErrorLog "/www/wwwlogs/api.seudominio.com-error_log"
+    CustomLog "/www/wwwlogs/api.seudominio.com-access_log" combined
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyTimeout 600
+    RequestHeader set X-Forwarded-Proto "https"
+    RewriteEngine On
+    RewriteCond %{HTTP:Upgrade} =websocket [NC]
+    RewriteRule ^/socket.io/(.*) ws://127.0.0.1:7777/socket.io/$1 [P,L]
+    ProxyPass /socket.io/ http://127.0.0.1:7777/socket.io/
+    ProxyPassReverse /socket.io/ http://127.0.0.1:7777/socket.io/
+    ProxyPass / http://127.0.0.1:7777/
+    ProxyPassReverse / http://127.0.0.1:7777/
+    LimitRequestBody 209715200
+</VirtualHost>

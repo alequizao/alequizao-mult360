@@ -1,0 +1,11 @@
+# WHATICKET — frontend app.seudominio.com (HTTPS pelo Cloudflare) -> Node 127.0.0.1:6666
+<VirtualHost *:80>
+    ServerName app.seudominio.com
+    ErrorLog "/www/wwwlogs/app.seudominio.com-error_log"
+    CustomLog "/www/wwwlogs/app.seudominio.com-access_log" combined
+    ProxyPreserveHost On
+    ProxyRequests Off
+    RequestHeader set X-Forwarded-Proto "https"
+    ProxyPass / http://127.0.0.1:6666/
+    ProxyPassReverse / http://127.0.0.1:6666/
+</VirtualHost>

@@ -1,4 +1,12 @@
-# ALEQUIZÃO MULT360
+# ALEQUIZÃO MULT360 — Plataforma de atendimento WhatsApp multiusuário (CRM + chatbot)
+
+[![Licença MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
+[![Node.js 20+](https://img.shields.io/badge/node-20%2B-green.svg)](#2-requisitos)
+[![PostgreSQL](https://img.shields.io/badge/banco-PostgreSQL-336791.svg)](MANUAL.md)
+[![PWA](https://img.shields.io/badge/PWA-instal%C3%A1vel-5a0fc8.svg)](MANUAL.md)
+[![Demo](https://img.shields.io/badge/demo-zap.alequizao.com-2563EB.svg)](https://zap.alequizao.com)
+
+> **ALEQUIZÃO MULT360** é um sistema de **atendimento ao cliente via WhatsApp com vários atendentes no mesmo número** — multiatendimento, filas/departamentos, chatbot, **respostas automáticas por palavra-chave sem fila**, campanhas de envio em massa, Kanban de atendimentos, chat interno, integrações com IA (OpenAI), Typebot, n8n e API REST. É uma alternativa **open source e self-hosted** a plataformas pagas como Multi360, Zenvia, Take Blip ou Huggy. Base: Whaticket SaaS + Baileys (WhatsApp Web multi-device). Stack: Node.js/TypeScript, React, PostgreSQL, Redis. Desenvolvido por **[Alex Junior (@alequizao)](https://github.com/alequizao)**, Maceió/AL.
 
 Plataforma de atendimento multicanal via WhatsApp (multiusuário, filas, chatbot, campanhas, Kanban, IA) — baseada no Whaticket SaaS, com correções e módulos próprios do **Alequizão**.
 
@@ -49,6 +57,29 @@ PORT=6666 pm2 start server.js --name whaticket-frontend
 ```
 
 Requisitos: Node 20+, PostgreSQL 14+, Redis, PM2, proxy reverso (Apache/Nginx) com WebSocket em `/socket.io/`.
+
+
+## ❓ Perguntas frequentes
+
+**O que é o ALEQUIZÃO MULT360?** Um CRM de atendimento pelo WhatsApp: vários atendentes usam o mesmo número, com filas, chatbot, respostas automáticas, campanhas e relatórios, instalado no seu próprio servidor (self-hosted).
+
+**É gratuito?** Sim. Código aberto sob licença MIT. Você paga apenas o seu servidor (VPS).
+
+**Precisa da API oficial do WhatsApp (Meta)?** Não. Usa o WhatsApp Web multi-device (Baileys): conecta lendo um QR code, como o WhatsApp Web.
+
+**Quantos atendentes e números posso conectar?** Ilimitados (o plano padrão vem sem limites).
+
+**Funciona no celular?** Sim, é um PWA instalável (Android/iPhone) com notificações sonoras e atualização automática.
+
+**Qual a diferença para o Whaticket original?** Respostas automáticas sem fila, suporte ao identificador LID, contatos automáticos com nome e foto, sessão que não cai, login por seleção de usuário, histórico de edição de contatos, tema e PWA próprios — veja a lista acima e o [MANUAL.md](MANUAL.md).
+
+**Palavras-chave:** atendimento whatsapp, multiatendimento, multi atendentes whatsapp, crm whatsapp, chatbot whatsapp, whaticket, baileys, api whatsapp, disparo em massa whatsapp, campanhas whatsapp, kanban atendimento, help desk whatsapp, sistema de atendimento open source, alternativa multi360, alequizao, alequizão, Maceió, Alagoas.
+
+## 🛠️ Scripts e exemplos de infraestrutura
+
+- [`docs/whaticket-backup.sh`](docs/whaticket-backup.sh) — backup diário do banco + mídias semanais, retenção automática.
+- [`docs/whaticket-status.sh`](docs/whaticket-status.sh) — coletor da página de status (`status.json`).
+- [`docs/apache-api.conf.example`](docs/apache-api.conf.example) e [`docs/apache-app.conf.example`](docs/apache-app.conf.example) — vhosts Apache com WebSocket.
 
 ## 👨‍💻 Desenvolvedor
 
