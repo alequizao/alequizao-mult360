@@ -1,3 +1,7 @@
+/*
+ * ALEQUIZÃO MULT360 · Desenvolvido por Alequizao <alequizao.dev@gmail.com>
+ * https://github.com/alequizao · © 2026 Alequizao. Todos os direitos reservados.
+ */
 // ALEQUIZAO: mapa LID (id interno do WhatsApp, ex. 118597485633703@lid) -> telefone (55...@s.whatsapp.net)
 const cache = new Map<string, string>();
 const digits = (j: string) => (j || "").split("@")[0].split(":")[0];

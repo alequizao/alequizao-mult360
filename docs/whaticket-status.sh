@@ -1,4 +1,6 @@
 #!/bin/bash
+# ALEQUIZÃO MULT360 · Desenvolvido por Alequizao <alequizao.dev@gmail.com>
+# https://github.com/alequizao · © 2026 Alequizao. Todos os direitos reservados.
 # Coleta o status do Whaticket a cada minuto -> /caminho/para/whaticket/status.json (lido pelo index.php)
 OUT=/caminho/para/whaticket/status.json
 export PGPASSWORD=SENHA_DO_BANCO

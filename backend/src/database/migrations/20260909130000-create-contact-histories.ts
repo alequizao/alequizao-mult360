@@ -1,3 +1,7 @@
+/*
+ * ALEQUIZÃO MULT360 · Desenvolvido por Alequizao <alequizao.dev@gmail.com>
+ * https://github.com/alequizao · © 2026 Alequizao. Todos os direitos reservados.
+ */
 import { QueryInterface, DataTypes } from "sequelize";
 
 // ALEQUIZAO: histórico de edições de contatos

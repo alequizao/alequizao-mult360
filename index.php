@@ -1,5 +1,9 @@
 <?php
 declare(strict_types=1);
+/*
+ * ALEQUIZÃO MULT360 · Desenvolvido por Alequizao <alequizao.dev@gmail.com>
+ * https://github.com/alequizao · © 2026 Alequizao. Todos os direitos reservados.
+ */
 // Página de status do Whaticket (alequizao.com/whaticket). Dados: status.json (cron 1/min) + checagens HTTP ao vivo.
 header('Cache-Control: no-store');
 $json = @file_get_contents(__DIR__ . '/status.json');

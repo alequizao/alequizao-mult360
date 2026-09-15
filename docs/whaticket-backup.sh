@@ -1,4 +1,6 @@
 #!/bin/bash
+# ALEQUIZÃO MULT360 · Desenvolvido por Alequizao <alequizao.dev@gmail.com>
+# https://github.com/alequizao · © 2026 Alequizao. Todos os direitos reservados.
 # Backup diário do ALEQUIZÃO MULT360 (Whaticket): banco Postgres todo dia, mídias (backend/public) aos domingos.
 # Retenção: 7 dumps diários, 4 pacotes de mídia. Log em /var/log/whaticket-backup.log
 DEST=/root/backups/whaticket
